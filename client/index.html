@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>a+b web</title>
+</head>
+<body>
+<div class="container">
+    <div class="col-md-5 col-md-offset-3">
+        <div class="row">
+            <h3>简单的websocket计算a+b示例</h3>
+        </div>
+        <div class="row">
+            <label for="num1">数字a</label>
+            <input type="text" class="form-control" id="num1">
+        </div>
+        <div class="row">
+            <label for="num2">数字b</label>
+            <input type="text" class="form-control" id="num2">
+        </div>
+        <p></p>
+        <div class="row">
+            <button type="button" class="btn btn-default" id="submit">计算</button>
+        </div>
+        <div class="row">
+            <p id="result"></p>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var socket = new WebSocket('ws://localhost:8080');
+    socket.onopen = function (event) {
+
+    };
+    socket.onmessage = function (msg) {
+        console.log(msg);
+        $('#result').html("计算结果为： " + msg.data);
+    }
+    $(document).ready(function (){
+        $('#submit').click(function() {
+            var obj = {
+                type: 'plus' ,
+                data: [
+                    $('#num1').val(),
+                    $('#num2').val()
+                ]
+            };
+            socket.send(JSON.stringify(obj));
+        });
+    });
+</script>
+</html>
